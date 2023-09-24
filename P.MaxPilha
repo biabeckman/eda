@@ -1,0 +1,38 @@
+import java.util.Scanner;
+import java.util.Stack;
+
+public class max_pilha {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        // lê os elementos da pilha
+        String[] elementosPilha = sc.nextLine().split(" ");
+
+        // cria pilha para armazenar elementos
+        Stack<Integer> stack = new Stack<>();
+        // loop para preencher a pilha com elementos até o índice especificado.
+        for (String elemento: elementosPilha) {
+            //Converte o elemento de elementosPilha[i] em um número inteiro
+            int valor = Integer.parseInt(elemento);
+            //add o valor na pilha
+            stack.push(valor);
+        }
+
+        // cria pilha para armazenar elementos
+        Stack<Integer> maxStack = new Stack<>();
+        // outro laço para calcular o max ate o indice especificado
+        for (int i = 0; i <= stack.size(); i++) {
+            //desempilhamos o elemento do topo da pilha original e armazenamos na variavel 
+            int valor = stack.pop();
+            // Verifica se a pilha maxStack está vazia ou se o valor é maior ou igual 
+            // ao elemento no topo da pilha maxStack. Se for verdadeiro, add o valor para maxStack.
+            if (maxStack.isEmpty() || valor >= maxStack.peek()) {
+                maxStack.push(valor);
+            }
+        }
+        //obtem o maior valor e retorna ele
+        int maxElement = maxStack.peek();
+        System.out.println(maxElement);
+        
+        sc.close();
+    }
+}
