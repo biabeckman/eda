@@ -1,0 +1,76 @@
+//Escreva um programa remove os extremos de uma LinkedList. A quantidade de extremos a ser removida é passada como argumento na linha de comando.
+import java.util.Scanner;
+
+class Node {
+    int data;
+    Node next;
+
+    public Node(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+class LinkedList {
+    Node head;
+
+    public void addLast(int data) {
+        Node newNode = new Node(data);
+        if (head == null) {
+            head = newNode;
+        } else {
+            Node current = head;
+            while (current.next != null) {
+                current = current.next;
+            }
+            current.next = newNode;
+        }
+    }
+
+    public void removeExtremes(int count) {
+        if (head == null || count <= 0) {
+            return; // Não há nada para remover.
+        }
+
+        if (count == 1) {
+            head = head.next;
+            return;
+        }
+
+        // Encontre o tamanho da lista.
+        int size = 0;
+        Node current = head;
+        while (current != null) {
+            size++;
+            current = current.next;
+        }
+
+        if (count >= size) {
+            head = null; // Remova todos os elementos.
+            return;
+        }
+
+        // Encontre o novo tamanho da lista após a remoção dos extremos.
+        int newSize = size - 2 * count;
+
+        // Remova os primeiros "count" elementos.
+        current = head;
+        for (int i = 0; i < count; i++) {
+            current = current.next;
+        }
+
+        Node newHead = current;
+        Node newTail = current;
+
+        // Encontre o novo tail.
+        while (newSize > 1) {
+            newTail = newTail.next;
+            newSize--;
+        }
+
+        newTail.next = null;
+        head = newHead;
+    }
+
+  
+}
