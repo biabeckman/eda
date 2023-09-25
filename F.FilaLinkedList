@@ -1,0 +1,116 @@
+import java.util.Scanner;
+
+class Node {
+    int data;
+    Node next;
+    Node prev;
+
+    Node(int data) {
+        this.data = data;
+        this.next = null;
+        this.prev = null;
+    }
+}
+
+class LinkedListQueue {
+    private Node front;
+    private Node rear;
+
+    LinkedListQueue() {
+        this.front = null;
+        this.rear = null;
+    }
+
+    // Adicionar elemento à fila
+    void add(int data) {
+        Node newNode = new Node(data);
+        if (rear == null) {
+            front = newNode;
+            rear = newNode;
+        } else {
+            rear.next = newNode;
+            newNode.prev = rear;
+            rear = newNode;
+        }
+    }
+
+    // Remover elemento da fila
+    void remove() {
+        if (front == null) {
+            System.out.println("empty");
+        } else {
+            if (front == rear) {
+                front = null;
+                rear = null;
+            } else {
+                front = front.next;
+                front.prev = null;
+            }
+        }
+    }
+
+    // Obter elemento da frente da fila
+    void element() {
+        if (front == null) {
+            System.out.println("empty");
+        } else {
+            System.out.println(front.data);
+        }
+    }
+
+    // Procurar elemento na fila e retornar a primeira posição (iniciando de 0)
+    int search(int data) {
+        return searchRecursive(front, data, 0);
+    }
+
+    private int searchRecursive(Node current, int data, int index) {
+        if (current == null) {
+            return -1;
+        }
+        if (current.data == data) {
+            return index;
+        }
+        return searchRecursive(current.next, data, index + 1);
+    }
+
+    // Imprimir o conteúdo da fila
+    void print() {
+        if (front == null) {
+            System.out.println("empty");
+        } else {
+            Node current = front;
+            while (current != null) {
+                System.out.print(current.data + " ");
+                current = current.next;
+            }
+            System.out.println();
+        }
+    }
+}
+
+public class Solution {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        LinkedListQueue queue = new LinkedListQueue();
+
+        while (scanner.hasNext()) {
+            String operation = scanner.next();
+            if (operation.equals("add")) {
+                int data = scanner.nextInt();
+                queue.add(data);
+            } else if (operation.equals("remove")) {
+                queue.remove();
+            } else if (operation.equals("element")) {
+                queue.element();
+            } else if (operation.equals("search")) {
+                int data = scanner.nextInt();
+                int result = queue.search(data);
+                System.out.println(result);
+            } else if (operation.equals("print")) {
+                queue.print();
+            } else if (operation.equals("end")) {
+                break;
+            }
+        }
+    }
+}
