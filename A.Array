@@ -1,0 +1,91 @@
+public class ArrayList {
+
+	private int[] list;
+	private int size;
+	
+	public ArrayList() {
+		this.list = new int[20];
+		this.size = 0;
+	}
+	
+	public ArrayList(int capacidade) {
+		this.list = new int[capacidade];
+		this.size = 0;
+	}
+	
+	public boolean isEmpty() {
+		return this.size == 0;
+	}
+	
+	private boolean isFull() {
+		return this.size == this.list.length;
+	}
+	
+	public void add(int e) {
+		
+		if (isFull())
+			resize();
+		this.list[size] = e;
+		size++;
+		
+	}
+	
+	public int indexOf(int value) {
+		
+		for (int i = 0; i < size; i++)
+			if (this.list[i] == value) return i;
+		
+		return -1;
+	
+	}
+	
+	
+	
+	public int get(int index) {
+		
+		if (index >= size || index < 0) {
+			throw new ArrayIndexOutOfBoundsException();
+		} else {
+			return this.list[index];
+		}
+
+	}
+	
+
+	private void resize() {
+		
+		int[] newList = new int[this.list.length * 2];
+		
+		for (int i = 0; i < size; i++) {
+			newList[i] = this.list[i];
+		}
+		
+		this.list = newList;
+		
+	}
+
+public Elemento remove(int index){
+if(index < 0 || index>= size){
+return null;
+}
+Elemento elemento = get(index);
+shiftEsquerda(index);
+size -=1;
+return Elemento;
+}
+
+private void shiftEsquerda(int index){
+for(int i = index; i < size -1;i++){
+this.list[i]=this.list[i+1];
+}
+}
+	
+	public String toString() {
+		return Arrays.toString(this.list);
+	}
+	
+	public int size(){
+		return size;
+	}
+	
+}
