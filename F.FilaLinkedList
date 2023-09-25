@@ -1,116 +1,117 @@
+import java.util.LinkedList;
 import java.util.Scanner;
 
-class Node {
-    int data;
-    Node next;
-    Node prev;
+public class fila_linkedlist {
+    public static class Fila {
+        private Node head;
+        private Node tail;
 
-    Node(int data) {
-        this.data = data;
-        this.next = null;
-        this.prev = null;
-    }
-}
+        private class Node {
+            int data;
+            Node next;
+            Node prev;
 
-class LinkedListQueue {
-    private Node front;
-    private Node rear;
-
-    LinkedListQueue() {
-        this.front = null;
-        this.rear = null;
-    }
-
-    // Adicionar elemento à fila
-    void add(int data) {
-        Node newNode = new Node(data);
-        if (rear == null) {
-            front = newNode;
-            rear = newNode;
-        } else {
-            rear.next = newNode;
-            newNode.prev = rear;
-            rear = newNode;
-        }
-    }
-
-    // Remover elemento da fila
-    void remove() {
-        if (front == null) {
-            System.out.println("empty");
-        } else {
-            if (front == rear) {
-                front = null;
-                rear = null;
-            } else {
-                front = front.next;
-                front.prev = null;
+            Node(int data) {
+                this.data = data;
+                this.next = null;
+                this.prev = null;
             }
         }
-    }
 
-    // Obter elemento da frente da fila
-    void element() {
-        if (front == null) {
-            System.out.println("empty");
-        } else {
-            System.out.println(front.data);
+        public boolean isEmpty() {
+            return head == null;
         }
-    }
 
-    // Procurar elemento na fila e retornar a primeira posição (iniciando de 0)
-    int search(int data) {
-        return searchRecursive(front, data, 0);
-    }
-
-    private int searchRecursive(Node current, int data, int index) {
-        if (current == null) {
-            return -1;
+        public void add(int elemento) {
+            Node newNode = new Node(elemento);
+            if (isEmpty()) {
+                head = newNode;
+                tail = newNode;
+            } else {
+                tail.next = newNode;
+                newNode.prev = tail;
+                tail = newNode;
+            }
         }
-        if (current.data == data) {
-            return index;
-        }
-        return searchRecursive(current.next, data, index + 1);
-    }
 
-    // Imprimir o conteúdo da fila
-    void print() {
-        if (front == null) {
-            System.out.println("empty");
-        } else {
-            Node current = front;
+        public int remove() {
+            if (isEmpty()) {
+                System.out.println("empty");
+                return -1;
+            }
+
+            int elemento = head.data;
+            head = head.next;
+            if (head != null) {
+                head.prev = null;
+            } else {
+                tail = null;
+            }
+            return elemento;
+        }
+
+        public int element() {
+            if (isEmpty()) {
+                System.out.println("empty");
+                return -1;
+            }
+            return head.data;
+        }
+
+        public void print() {
+            if (isEmpty()) {
+                System.out.println("empty");
+                return;
+            }
+
+            Node current = head;
             while (current != null) {
                 System.out.print(current.data + " ");
                 current = current.next;
             }
             System.out.println();
         }
-    }
-}
 
-public class Solution {
+        public int search(int elemento) {
+            return searchRecursive(head, elemento, 0);
+        }
+
+        private int searchRecursive(Node current, int elemento, int index) {
+            if (current == null) {
+                return -1;
+            }
+
+            if (current.data == elemento) {
+                return index;
+            }
+
+            return searchRecursive(current.next, elemento, index + 1);
+        }
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        LinkedListQueue queue = new LinkedListQueue();
+        Fila fila = new Fila();
 
-        while (scanner.hasNext()) {
-            String operation = scanner.next();
-            if (operation.equals("add")) {
-                int data = scanner.nextInt();
-                queue.add(data);
-            } else if (operation.equals("remove")) {
-                queue.remove();
-            } else if (operation.equals("element")) {
-                queue.element();
-            } else if (operation.equals("search")) {
-                int data = scanner.nextInt();
-                int result = queue.search(data);
-                System.out.println(result);
-            } else if (operation.equals("print")) {
-                queue.print();
-            } else if (operation.equals("end")) {
-                break;
+        String operacao;
+        while (!(operacao = scanner.nextLine()).equals("end")) {
+            String[] partes = operacao.split(" ");
+            if (partes[0].equals("add")) {
+                int elemento = Integer.parseInt(partes[1]);
+                fila.add(elemento);
+            } else if (partes[0].equals("remove")) {
+                fila.remove();
+            } else if (partes[0].equals("element")) {
+                fila.element();
+            } else if (partes[0].equals("print")) {
+                fila.print();
+            } else if (partes[0].equals("search")) {
+                int elemento = Integer.parseInt(partes[1]);
+                int posicao = fila.search(elemento);
+                System.out.println(posicao);
             }
         }
+
+        scanner.close();
     }
 }
