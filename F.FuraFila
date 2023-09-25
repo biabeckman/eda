@@ -1,0 +1,36 @@
+import java.util.Scanner;
+
+public class MinhaSolucao {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        // Ler a fila como uma sequência de inteiros
+        String[] filaStr = sc.nextLine().split(" ");
+        int[] fila = new int[filaStr.length];
+        for (int i = 0; i < filaStr.length; i++) {
+            fila[i] = Integer.parseInt(filaStr[i]);
+        }
+        
+        // Ler o índice que marca o início dos idosos na fila
+        int indiceIdosos = sc.nextInt();
+        
+        // Processar a fila
+        for (int i = indiceIdosos; i > 0; i--) {
+            // Trocar os elementos adjacentes
+            int temp = fila[i];
+            fila[i] = fila[i - 1];
+            fila[i - 1] = temp;
+            
+            // Imprimir o estado atual da fila
+            for (int j = 0; j < fila.length; j++) {
+                System.out.print(fila[j]);
+                if (j < fila.length - 1) {
+                    System.out.print(" ");
+                }
+            }
+            System.out.println();
+        }
+        
+        sc.close();
+    }
+}
