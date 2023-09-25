@@ -1,0 +1,40 @@
+import java.util.LinkedList;
+import java.util.Scanner;
+
+public class RemoveIguais {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        LinkedList<Integer> linkedList = new LinkedList<>();
+
+        // Ler os inteiros e adicioná-los à lista encadeada
+        String[] values = scanner.nextLine().split(" ");
+        for (String value : values) {
+            linkedList.addLast(Integer.parseInt(value));
+        }
+
+        // Ler o valor dos elementos a serem removidos
+        int valorRemover = Integer.parseInt(scanner.nextLine());
+
+        // Verificar se a lista não está vazia
+        if (!linkedList.isEmpty()) {
+            // Percorrer a lista e remover elementos iguais ao valor especificado
+            linkedList.removeIf(elemento -> elemento == valorRemover);
+
+            // Imprimir a lista resultante ou "vazia" se a lista estiver vazia
+            if (!linkedList.isEmpty()) {
+                for (int i = 0; i < linkedList.size(); i++) {
+                    System.out.print(linkedList.get(i));
+                    if (i < linkedList.size() - 1) {
+                        System.out.print(" ");
+                    }
+                }
+                System.out.println();
+            } else {
+                System.out.println("vazia");
+            }
+        } else {
+            // Se a lista estiver vazia, imprimir "vazia"
+            System.out.println("vazia");
+        }
+    }
+}
