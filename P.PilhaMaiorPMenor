@@ -1,0 +1,132 @@
+import java.util.Scanner;
+import java.util.Stack;
+
+class PilhaMaiorPmenor {
+    private Stack<Integer> stack;
+
+    public PilhaMaiorPmenor() {
+        stack = new Stack<>();
+    }
+
+    public void push(int value) {
+        stack.push(value);
+    }
+
+    public int pop() {
+        return stack.pop();
+    }
+
+    public boolean isEmpty() {
+        return stack.isEmpty();
+    }
+
+    public int getMax(int index) {
+        Stack<Integer> aux = new Stack<>();
+        int max = Integer.MIN_VALUE;
+
+        for (int i = 0; i <= index; i++) {
+            int current = stack.elementAt(i); // Obtem o elemento sem remover
+            aux.push(current);
+            max = Math.max(max, current);
+        }
+
+        while (!aux.isEmpty()) {
+            stack.push(aux.pop());
+        }
+
+        return max;
+    }
+
+    public void inverte(int index) {
+        Stack<Integer> aux = new Stack<>();
+
+        for (int i = 0; i <= index; i++) {
+            aux.push(stack.elementAt(i)); // Obtem o elemento sem remover
+        }
+
+        for (int i = 0; i <= index; i++) {
+            stack.pop();
+        }
+
+        while (!aux.isEmpty()) {
+            stack.push(aux.pop());
+        }
+    }
+
+    public void ordena() {
+        Stack<Integer> aux = new Stack<>();
+
+        while (!stack.isEmpty()) {
+            int temp = stack.pop();
+
+            while (!aux.isEmpty() && aux.peek() > temp) {
+                stack.push(aux.pop());
+            }
+
+            aux.push(temp);
+        }
+
+        // Coloca os elementos ordenados de volta na pilha original
+        while (!aux.isEmpty()) {
+            stack.push(aux.pop());
+        }
+    }
+    private int buscaMin(int index) {
+        Stack<Integer> aux = new Stack<>();
+        int min = Integer.MAX_VALUE;
+        int minIndex = -1;
+
+        for (int i = 0; i <= index; i++) {
+            int current = stack.elementAt(i); // Obtem o elemento sem remover
+            aux.push(current);
+            if (current <= min) {
+                min = current;
+                minIndex = i;
+            }
+        }
+
+        while (!aux.isEmpty()) {
+            stack.push(aux.pop());
+        }
+
+        return minIndex;
+    }
+
+    public void printAsc() {
+        Stack<Integer> aux = new Stack<>();
+
+        // Transferir elementos para a pilha auxiliar (invertendo a ordem)
+        while (!stack.isEmpty()) {
+            aux.push(stack.pop());
+        }
+
+        // Imprimir os elementos da pilha auxiliar (que estão em ordem crescente)
+        while (!aux.isEmpty()) {
+            int value = aux.pop();
+            System.out.println(value);
+            // Colocar de volta na pilha original (opcional)
+            stack.push(value);
+        }
+    }
+
+}
+
+public class Solution {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int size = scanner.nextInt();
+        scanner.nextLine();
+
+        Pilha pilha = new Pilha();
+
+        for (int i = 0; i < size; i++) {
+            int value = scanner.nextInt();
+            pilha.push(value);
+        }
+
+        pilha.ordena();
+
+        System.out.println("-");
+        pilha.printAsc();
+    }
+}
