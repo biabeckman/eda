@@ -1,120 +1,115 @@
-package tsteda.filacomarray;
-
 import java.util.Scanner;
+// Implemente uma fila com capacidade limitada utilizando array.
+// Seu programa deve imprimir o conteúdo da fila sempre que uma operação print for lida. Se a fila estiver vazia, imprima "empty".
+//Seu programa deve imprimir o elemento inicial da fila quando ler a operação element.
+//Se a fila estiver vazia e for lida a operação remove, imprima "empty".
+//Se a fila estiver cheia e for lida a operação add, imprima "full".
+public class fila_array {
+    // declara classe fila
+        public static class Fila {
+            private int[] fila;
+            private int tamanho;
+            private int capacidade;
+            private int inicio;
+            private int fim;
+    
+            public Fila(int capacidade) {
+                this.capacidade = capacidade;
+                this.fila = new int[capacidade];
+                this.tamanho = 0;
+                this.inicio = 0;
+                this.fim = -1;
+            }
 
-class FilaComArray {
-	private int contador;
-	private int[] array;
-	private static final String CHEIO = "full";
-	private static final String VAZIO = "empty";
-	
-	public FilaComArray(int tamanho) {
-		this.contador = -1;
-		this.array = new int[tamanho];
-	}
-	
-	public static void main(String[] args) {
-		Scanner rdr = new Scanner(System.in);
-		
-		int tamanho = rdr.nextInt(); rdr.nextLine();
-		FilaComArray fila = new FilaComArray(tamanho);
-		
-		while(true) {
-			String[] entrada = rdr.nextLine().split(" ");
-			if (entrada[0].equals("end")) {
-				break;
-			}
-			String result;
-			if (entrada[0].equals("add")) {
-				result = fila.recebeComando(entrada[1]);
-			} else {
-				result = fila.recebeComando(entrada[0]);
-			}
-			if (result != null) {
-				System.out.println(result);
-			}
-		}
-		
-		rdr.close();
-	}
+            //head for igual ao tail
+            public boolean isEmpty() {
+                return tamanho == 0;
+            }
 
-	public String recebeComando(String comando) {
-		if (comando.equals("element")) {
-			return this.element();
-		} else if (comando.equals("remove")) {
-			return this.remove();
-		} else if (comando.equals("print")) {
-			return this.print();
-		} else {
-			return this.add(Integer.parseInt(comando));
-		}
-	}
-	
-	public String print() {
-		String saida = null; 
-		if (isEmpty()) {
-			saida = VAZIO;
-		} else {
-			saida = "";
-			for (int i = 0; i <= this.contador; i++) {
-				saida += this.array[i];
-				if(i!=contador) {
-					saida += " ";
-				}
-			}
-		}
-		return saida;
-	}
+            //se tail+1%capacidade = head
+            public boolean isFull() {
+                return tamanho == capacidade;
+            }
+    
 
-	public String add(int numero) {
-		String retorno = null;
-		if (isFull()) {
-			retorno = CHEIO;
-		} else {
-			this.contador++;
-			array[this.contador] = numero;
-		}
-		return retorno;
-	}
-	
-	private boolean isEmpty() {
-		return contador == -1;
-	}
-	
-	private boolean isFull(){
-		return contador == array.length-1;
-	}
-	public String remove() {
-		String retorno = null;
-		if (isEmpty()) {
-			retorno = VAZIO;
-		} else {
-			swapBack();
-			this.contador--;
-		}
-		return retorno;
-	}
-	
-	public String element() {
-		String retorno = null;
-		if (isEmpty()) {
-			retorno = VAZIO;
-		} else {
-			retorno = Integer.toString(this.array[0]);
-		}
-		return retorno;
-	}
-	
-	private void swapBack() {
-		for (int i = 0; i < contador; i++) {
-			swap(i, i+1);
-		}
-	}
-
-	private void swap(int i, int j) {
-		int aux = this.array[i];
-		this.array[i] = this.array[j];
-		this.array[j] = aux;
-	}
-	
-}
+            public void add(int elemento) {
+                if (isFull()) {
+                    System.out.println("full");
+                    return;
+                }
+                //avança o tail e add
+                fim = (fim + 1) % capacidade;
+                fila[fim] = elemento;
+                tamanho++;
+            }
+    
+            //armazena o head numa variavel, avança head e retorna a variavel
+            public int remove() {
+                if (isEmpty()) {
+                    System.out.println("empty");
+                    return -1;
+                }
+    
+                int elemento = fila[inicio];
+                inicio = (inicio + 1) % capacidade;
+                tamanho--;
+                return elemento;
+            }
+    
+            //retorna o head
+            public int element() {
+                if (isEmpty()) {
+                    System.out.println("empty");
+                    return -1;
+                }
+    
+                return fila[inicio];
+            }
+    
+            // imprime a fila toda
+            public void print() {
+                if (isEmpty()) {
+                    System.out.println("empty");
+                    return;
+                }
+    
+                int atual = inicio;
+                for (int i = 0; i < tamanho; i++) {
+                    System.out.print(fila[atual] + " ");
+                    atual = (atual + 1) % capacidade;//avança
+                }
+                System.out.println();
+            }
+        }
+    
+        public static void main(String[] args) {
+            Scanner scanner = new Scanner(System.in);
+    
+            int capacidade = scanner.nextInt();
+            scanner.nextLine(); // Consumir a quebra de linha após o número
+    
+            Fila fila = new Fila(capacidade);
+    
+            String operacao;
+            while (!(operacao = scanner.nextLine()).equals("end")) {
+                String[] partes = operacao.split(" ");
+                if (partes[0].equals("add")) {
+                    if (fila.isFull()) {
+                        System.out.println("full");
+                    } else {
+                        int elemento = Integer.parseInt(partes[1]);
+                        fila.add(elemento);
+                    }
+                } else if (partes[0].equals("remove")) {
+                    fila.remove();
+                } else if (partes[0].equals("element")) {
+                    fila.element();
+                } else if (partes[0].equals("print")) {
+                    fila.print();
+                }
+                scanner.nextLine(); // Consumir a quebra de linha após a operação
+            }
+    
+            scanner.close();
+        }
+    }
